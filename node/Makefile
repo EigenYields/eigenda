@@ -25,7 +25,7 @@ clean:
 docker: docker-node docker-plugin
 
 docker-node:
-	cd ../ && docker build --build-arg SEMVER=${SEMVER} --build-arg GITCOMMIT=${GITCOMMIT} --build-arg GITDATE=${GITDATE} . -t opr-node:${SEMVER} -t opr-node:${RELEASE_TAG} -f node/cmd/Dockerfile
+	cd ../ && docker buildx build --platform linux/amd64,linux/arm64 --build-arg SEMVER=${SEMVER} --build-arg GITCOMMIT=${GITCOMMIT} --build-arg GITDATE=${GITDATE} . -t opr-node:${SEMVER} -t opr-node:${RELEASE_TAG} -f node/cmd/Dockerfile --push
 
 docker-plugin:
 	cd ../ && docker build --build-arg SEMVER=${SEMVER} --build-arg GITCOMMIT=${GITCOMMIT} --build-arg GITDATE=${GITDATE} . -t opr-nodeplugin:${SEMVER} -t opr-nodeplugin:${RELEASE_TAG} -f node/plugin/cmd/Dockerfile
