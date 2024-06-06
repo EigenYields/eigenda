@@ -71,8 +71,7 @@ jobs:
       - name: Build and push Docker images
         run: |
           docker buildx create --use
-          docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/eigenyields/eigenda/node:${{ env.SEMVER }} --build-arg SEMVER=${{ env.SEMVER }} --build-arg GITCOMMIT=${{ github.sha }} --build-arg GITDATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") -f disperser/cmd/node/Dockerfile --push .
-          # Repeat for other services
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.SEMVER }} --build-arg SEMVER=${{ env.SEMVER }} --build-arg GITCOMMIT=${{ github.sha }} --build-arg GITDATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") -f node/cmd/Dockerfile --push .
 
       # # Build And Push Image
       # - name: Build docker image release
