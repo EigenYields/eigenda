@@ -5,6 +5,7 @@ import (
 
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/iterator"
+	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/syndtr/goleveldb/leveldb/util"
 )
 
@@ -16,7 +17,12 @@ type LevelDBStore struct {
 }
 
 func NewLevelDBStore(path string) (*LevelDBStore, error) {
-	handle, err := leveldb.OpenFile(path, nil)
+	// Custom options for write buffer size and block size
+	opts := &opt.Options{
+		WriteBuffer: 32 * opt.GiB, // 32GB
+		BlockSize:   32 * opt.KiB, // 32KB
+	}
+	handle, err := leveldb.OpenFile(path, opts)
 	return &LevelDBStore{handle}, err
 }
 
