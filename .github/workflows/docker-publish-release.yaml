@@ -44,6 +44,9 @@ jobs:
           echo "SemVer ${{ env.fullSemVer }} Forced ${{ github.event.inputs.force }}"
         name: Display SemVer
 
+      - name: Log Environment Variables
+        run: printenv
+
       - name: Setup Buildx
         uses: docker/setup-buildx-action@v1
         with:
@@ -71,7 +74,7 @@ jobs:
       - name: Build and push Docker images
         run: |
           docker buildx create --use
-          docker buildx build --platform linux/amd64,linux/arm64 --build-arg SEMVER=${{ env.SemVer }} --build-arg GITCOMMIT=${{env.shortSha}} --build-arg GITDATE=${{env.commitDate}} . -t opr-node:${{ env.SemVer }} -t opr-node:${{ env.SemVer }} -f node/cmd/Dockerfile --push
+          docker buildx build --platform linux/amd64,linux/arm64 --build-arg SEMVER=${{ env.SemVer }} --build-arg GITCOMMIT=${{env.shortSha}} --build-arg GITDATE=${{env.commitDate}} . -t opr-node:${{ env.SemVer }} -t opr-node:${{ env.fullSemVer }} -f node/cmd/Dockerfile --push
 
       # # Build And Push Image
       # - name: Build docker image release
