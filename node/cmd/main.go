@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/Layr-Labs/eigenda/common/pubip"
@@ -80,58 +78,23 @@ func NodeMain(ctx *cli.Context) error {
 		return err
 	}
 
-	// Start the node with a cancellable context
-	errChan := run(node)
-	err = <-errChan
-	if err != nil {
-		node.Logger.Error("could not start node", "error", err)
-		return err
-	}
-
-	// err = node.Start(context.Background())
+	// // Start the node with a cancellable context
+	// errChan := run(node)
+	// err = <-errChan
 	// if err != nil {
 	// 	node.Logger.Error("could not start node", "error", err)
 	// 	return err
 	// }
+
+	err = node.Start(context.Background())
+	if err != nil {
+		node.Logger.Error("could not start node", "error", err)
+		return err
+	}
 
 	// Creates the GRPC server.
 	server := grpc.NewServer(config, node, logger, ratelimiter)
 	server.Start()
 
 	return nil
-}
-
-func run(node *node.Node) <-chan error {
-	errChan := make(chan error, 1)
-	ctx, stop := signal.NotifyContext(
-		context.Background(),
-		os.Interrupt,
-		syscall.SIGTERM,
-		syscall.SIGQUIT,
-	)
-
-	go func() {
-		<-ctx.Done()
-
-		node.Logger.Info("shutdown signal received")
-
-		defer func() {
-			stop()
-			close(errChan)
-		}()
-
-		if err := node.Shutdown(); err != nil {
-			errChan <- err
-		}
-		node.Logger.Info("shutdown completed")
-	}()
-
-	go func() {
-		node.Logger.Info("node starting")
-		if err := node.Start(context.Background()); err != nil {
-			errChan <- err
-		}
-	}()
-
-	return errChan
 }

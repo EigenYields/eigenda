@@ -19,8 +19,7 @@ type LevelDBStore struct {
 func NewLevelDBStore(path string) (*LevelDBStore, error) {
 	// Custom options for write buffer size and block size
 	opts := &opt.Options{
-		WriteBuffer: 16 * opt.GiB, // 32GB
-		BlockSize:   32 * opt.KiB, // 32KB
+		BlockSize: 32 * opt.KiB, // 32KB
 	}
 	handle, err := leveldb.OpenFile(path, opts)
 	return &LevelDBStore{handle}, err
@@ -28,10 +27,6 @@ func NewLevelDBStore(path string) (*LevelDBStore, error) {
 
 func (d *LevelDBStore) Compact() error {
 	return d.DB.CompactRange(util.Range{})
-}
-
-func (d *LevelDBStore) Close() error {
-	return d.DB.Close()
 }
 
 func (d *LevelDBStore) Put(key []byte, value []byte) error {
