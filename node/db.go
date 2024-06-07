@@ -13,4 +13,5 @@ type DB interface {
 	WriteBatch(keys, values [][]byte) error
 	NewIterator(prefix []byte) iterator.Iterator
 	Compact() error
+	Close() error
 }

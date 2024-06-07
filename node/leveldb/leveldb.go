@@ -30,6 +30,10 @@ func (d *LevelDBStore) Compact() error {
 	return d.DB.CompactRange(util.Range{})
 }
 
+func (d *LevelDBStore) Close() error {
+	return d.DB.Close()
+}
+
 func (d *LevelDBStore) Put(key []byte, value []byte) error {
 	return d.DB.Put(key, value, nil)
 }

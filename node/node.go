@@ -477,6 +477,23 @@ func (n *Node) checkCurrentNodeIp(ctx context.Context) {
 	}
 }
 
+func (n *Node) Shutdown() error {
+	n.Logger.Info("Flushing write buffer to disk")
+	// Compact flushes any pending writes to disk.
+	n.Store.db.Compact()
+
+	// Close the LevelDB
+	err := n.Store.db.Close()
+	if err != nil {
+		n.Logger.Error("failed to close LevelDB:", "error", err)
+		return err
+	}
+
+	n.Logger.Info("Node shutdown successfully")
+	return nil
+
+}
+
 // OperatorReachabilityResponse is the response object for the reachability check
 type OperatorReachabilityResponse struct {
 	OperatorID      string `json:"operator_id"`
