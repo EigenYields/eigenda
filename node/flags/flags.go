@@ -174,6 +174,12 @@ var (
 		Required: false,
 		EnvVar:   common.PrefixEnvVar(EnvVarPrefix, "REGISTER_AT_NODE_START"),
 	}
+	CompactAtStartFlag = cli.BoolFlag{
+		Name:     common.PrefixFlag(FlagPrefix, "compact-at-node-start"),
+		Usage:    "Whether to compact the database at start",
+		Required: false,
+		EnvVar:   common.PrefixEnvVar(EnvVarPrefix, "COMPACT_AT_NODE_START"),
+	}
 	ExpirationPollIntervalSecFlag = cli.StringFlag{
 		Name:     common.PrefixFlag(FlagPrefix, "expiration-poll-interval"),
 		Usage:    "How often (in second) to poll status and expire outdated blobs",
@@ -284,6 +290,7 @@ var requiredFlags = []cli.Flag{
 
 var optionalFlags = []cli.Flag{
 	RegisterAtNodeStartFlag,
+	CompactAtStartFlag,
 	ExpirationPollIntervalSecFlag,
 	ReachabilityPollIntervalSecFlag,
 	EnableTestModeFlag,

@@ -188,6 +188,13 @@ func (n *Node) Start(ctx context.Context) error {
 		n.Logger.Info("Enabled node api", "port", n.Config.NodeApiPort)
 	}
 
+	// Compact the database
+	if n.Config.CompactAtStart {
+		compactStart := time.Now()
+		n.Store.db.Compact()
+		n.Logger.Debug("DB compacted", "dbPath", n.Config.DbPath, "time", time.Since(compactStart))
+	}
+
 	go n.expireLoop()
 	go n.checkNodeReachability()
 

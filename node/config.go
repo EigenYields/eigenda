@@ -52,6 +52,7 @@ type Config struct {
 	OnchainMetricsInterval         int64
 	Timeout                        time.Duration
 	RegisterNodeAtStart            bool
+	CompactAtStart                 bool
 	ExpirationPollIntervalSec      uint64
 	EnableTestMode                 bool
 	OverrideBlockStaleMeasure      int64
@@ -180,6 +181,7 @@ func NewConfig(ctx *cli.Context) (*Config, error) {
 		OnchainMetricsInterval:         ctx.GlobalInt64(flags.OnchainMetricsIntervalFlag.Name),
 		Timeout:                        timeout,
 		RegisterNodeAtStart:            registerNodeAtStart,
+		CompactAtStart:                 ctx.GlobalBool(flags.CompactAtStartFlag.Name),
 		ExpirationPollIntervalSec:      expirationPollIntervalSec,
 		ReachabilityPollIntervalSec:    reachabilityPollIntervalSec,
 		EnableTestMode:                 testMode,

@@ -26,6 +26,10 @@ func NewLevelDBStore(path string) (*LevelDBStore, error) {
 	return &LevelDBStore{handle}, err
 }
 
+func (d *LevelDBStore) Compact() error {
+	return d.DB.CompactRange(util.Range{})
+}
+
 func (d *LevelDBStore) Put(key []byte, value []byte) error {
 	return d.DB.Put(key, value, nil)
 }
